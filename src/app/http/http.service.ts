@@ -22,30 +22,29 @@ export class HttpService {
       },
     });
 
-    this.setupInterceptors();
-  }
+    const setupInterceptors = () => {
+      // Request interceptor
+      this.axiosInstance.interceptors.request.use(
+        config => {
+          // You can modify the request config here
+          return config;
+        },
+        error => {
+          return Promise.reject(error);
+        },
+      );
 
-  private setupInterceptors(): void {
-    // Request interceptor
-    this.axiosInstance.interceptors.request.use(
-      config => {
-        // You can modify the request config here
-        return config;
-      },
-      error => {
-        return Promise.reject(error);
-      },
-    );
-
-    // Response interceptor
-    this.axiosInstance.interceptors.response.use(
-      response => {
-        return response;
-      },
-      error => {
-        return Promise.reject(error);
-      },
-    );
+      // Response interceptor
+      this.axiosInstance.interceptors.response.use(
+        response => {
+          return response;
+        },
+        error => {
+          return Promise.reject(error);
+        },
+      );
+    };
+    setupInterceptors();
   }
 
   // Generic request method

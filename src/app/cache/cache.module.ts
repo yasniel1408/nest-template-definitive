@@ -5,8 +5,8 @@ import {
   CacheModule as NestCacheModule,
 } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
-import Keyv from 'keyv';
-import { CacheableMemory, createKeyv } from 'cacheable';
+// import Keyv from 'keyv';
+// import { CacheableMemory, createKeyv } from 'cacheable';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Global()

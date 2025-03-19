@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'src/main.ts', 'src/setup-app.ts'],
+    ignores: ['**/eslint.config.mjs', '**/src/main.ts', '**/src/app.ts', '**/src/setup-app.ts', '**/src/setup-microservice.ts', '**/*.spec.ts', '**/*.e2e-spec.ts', '**/swagger.config.ts', '**/http.service.ts'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

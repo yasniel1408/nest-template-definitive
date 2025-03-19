@@ -2,7 +2,6 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { HealthCheckResponseDto } from './health-check.response.dto';
-import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 import { CacheService } from '../cache/cache.service';
 
 @ApiTags('Health Check')
