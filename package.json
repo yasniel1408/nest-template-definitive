@@ -29,6 +29,7 @@
     "@nestjs/swagger": "^11.0.7",
     "@nestjs/throttler": "^6.4.0",
     "axios": "^1.8.3",
+    "axios-retry": "^4.5.0",
     "cache-manager": "^6.4.1",
     "cacheable": "^1.8.9",
     "class-transformer": "^0.5.1",

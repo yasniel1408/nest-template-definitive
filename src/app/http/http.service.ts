@@ -1,11 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 
 @Injectable()
 export class HttpService {
   private readonly axiosInstance: AxiosInstance;
 
-  constructor() {
+  constructor(private readonly logger: Logger) {
+    axiosRetry(axios, { 
+      retries: 3, 
+      onMaxRetryTimesExceeded: (error, retryCount) => {
+        logger.error(`Max retry attempts (${retryCount}) reached:`, error);
+      },
+      retryDelay: axiosRetry.exponentialDelay,
+    });
+
     this.axiosInstance = axios.create({
       timeout: 10000, // 10 seconds
       headers: {
