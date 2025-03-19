@@ -25,14 +25,14 @@ export class AppController {
       'health',
       async () => {
         // simular carga
-        const delay = new Promise(resolve => setTimeout(resolve, 3000));
+        const delay = new Promise(resolve => setTimeout(resolve, 100));
         await delay.then(() => {
           console.log('Delayed for 1 second.');
         });
 
         return this.appService.getAPIData();
       },
-      36000000,
+      36000,
     ); // 10 hours
 
     return value;
