@@ -6,7 +6,7 @@ import { HealthCheckResponseDto } from './health-check.response.dto';
 export class AppService {
   constructor(private readonly config: ConfigService) {}
 
-  public getAPIData(): HealthCheckResponseDto {
+  public async getAPIData(): Promise<HealthCheckResponseDto> {
     return {
       env: this.config.getOrThrow<string>('NODE_ENV'),
       version: this.config.getOrThrow<string>('API_VERSION'),
