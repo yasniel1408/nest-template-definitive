@@ -3,6 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { HealthCheckResponseDto } from './health-check.response.dto';
 import { CacheService } from '../cache/cache.service';
+import { UseCircuitBreaker } from '../circuit-breaker/circuit-breaker.decorator';
 
 @ApiTags('Health Check')
 @Controller('/health')
@@ -12,6 +13,7 @@ export class AppController {
     private readonly cacheService: CacheService,
   ) {}
 
+  @UseCircuitBreaker()
   @Get()
   @ApiOperation({ summary: 'Get service health status' })
   @ApiResponse({

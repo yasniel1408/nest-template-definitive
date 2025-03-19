@@ -3,7 +3,6 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-  Inject,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CircuitBreakerService } from './circuit-breaker.service';
@@ -18,12 +17,11 @@ export class CircuitBreakerInterceptor implements NestInterceptor {
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const options = this.reflector.get(
-      CIRCUIT_BREAKER_OPTIONS,
-      context.getHandler(),
-    ) || {};
+    const options =
+      this.reflector.get(CIRCUIT_BREAKER_OPTIONS, context.getHandler()) || {};
 
-    const key = options.key || `${context.getClass().name}_${context.getHandler().name}`;
+    const key =
+      options.key || `${context.getClass().name}_${context.getHandler().name}`;
 
     return new Observable(subscriber => {
       this.circuitBreakerService

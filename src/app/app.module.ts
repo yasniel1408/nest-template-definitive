@@ -19,8 +19,8 @@ import { CircuitBreakerModule } from './circuit-breaker/circuit-breaker.module';
       // Configuración global
       failureThreshold: 5,
       resetTimeout: 60000,
-      halfOpenTimeout: 30000
-    })
+      halfOpenTimeout: 30000,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

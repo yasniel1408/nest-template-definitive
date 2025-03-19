@@ -10,7 +10,5 @@ export interface CircuitBreakerOptions {
 export const CIRCUIT_BREAKER_OPTIONS = 'CIRCUIT_BREAKER_OPTIONS';
 
 export function UseCircuitBreaker(options: CircuitBreakerOptions = {}) {
-  return applyDecorators(
-    SetMetadata(CIRCUIT_BREAKER_OPTIONS, options),
-  );
+  return applyDecorators(SetMetadata(CIRCUIT_BREAKER_OPTIONS, options));
 }
