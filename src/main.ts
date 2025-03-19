@@ -5,7 +5,7 @@ import { swaggerConfig } from './app/swagger/swagger.config';
 
 async function bootstrap() {
   // Config App
-  const {app, configService} = await App();
+  const { app, configService } = await App();
   setupApp(app);
 
   // Config Microservices
@@ -19,7 +19,7 @@ async function bootstrap() {
   await app.startAllMicroservices();
   return app;
 }
-bootstrap().then(async (app) => {
+bootstrap().then(async app => {
   const logger = app.get(Logger);
   logger.log(`Application is running on: ${await app.getUrl()}`);
   logger.log(`Check health route at: ${await app.getUrl()}/api/health`);

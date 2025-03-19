@@ -26,7 +26,9 @@ describe('AppController', () => {
         name: 'my-nest-project',
         status: 'ok',
       };
-      jest.spyOn(appService, 'getAPIData').mockImplementation(() => new Promise((resolve) => resolve(result)));
+      jest
+        .spyOn(appService, 'getAPIData')
+        .mockImplementation(() => new Promise(resolve => resolve(result)));
 
       expect(appController.healthCheck()).toBe(result);
     });

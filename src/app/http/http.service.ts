@@ -7,8 +7,8 @@ export class HttpService {
   private readonly axiosInstance: AxiosInstance;
 
   constructor(private readonly logger: Logger) {
-    axiosRetry(axios, { 
-      retries: 3, 
+    axiosRetry(axios, {
+      retries: 3,
       onMaxRetryTimesExceeded: (error, retryCount) => {
         logger.error(`Max retry attempts (${retryCount}) reached:`, error);
       },
@@ -28,28 +28,30 @@ export class HttpService {
   private setupInterceptors(): void {
     // Request interceptor
     this.axiosInstance.interceptors.request.use(
-      (config) => {
+      config => {
         // You can modify the request config here
         return config;
       },
-      (error) => {
+      error => {
         return Promise.reject(error);
       },
     );
 
     // Response interceptor
     this.axiosInstance.interceptors.response.use(
-      (response) => {
+      response => {
         return response;
       },
-      (error) => {
+      error => {
         return Promise.reject(error);
       },
     );
   }
 
   // Generic request method
-  async request<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  async request<T = any>(
+    config: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>> {
     return this.axiosInstance.request<T>(config);
   }
 
@@ -60,13 +62,21 @@ export class HttpService {
   }
 
   // POST method
-  async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async post<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     const response = await this.axiosInstance.post<T>(url, data, config);
     return response.data;
   }
 
   // PUT method
-  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async put<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     const response = await this.axiosInstance.put<T>(url, data, config);
     return response.data;
   }
@@ -78,7 +88,11 @@ export class HttpService {
   }
 
   // PATCH method
-  async patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+  async patch<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
     const response = await this.axiosInstance.patch<T>(url, data, config);
     return response.data;
   }

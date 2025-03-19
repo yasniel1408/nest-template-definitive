@@ -8,7 +8,13 @@ import { RateLimitingModule } from './rate-limiting/rate-limiting.module';
 import { HttpModule } from './http/http.module';
 
 @Module({
-  imports: [ConfigModule, LoggerModule, CacheModule, RateLimitingModule, HttpModule],
+  imports: [
+    ConfigModule,
+    LoggerModule,
+    CacheModule,
+    RateLimitingModule,
+    HttpModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

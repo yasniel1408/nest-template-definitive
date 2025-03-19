@@ -12,31 +12,33 @@ export const setupApp = (app: NestExpressApplication) => {
 
   app.setGlobalPrefix('api');
 
-  app.use(compression({
-    threshold: 0,   // compress all responses
-    level: 6,       // compression level (0-9)
-    filter: (req, res) => {
-      if (req.headers['x-no-compression']) {
-        // don't compress responses with this request header
-        return false;
-      }
-      // fallback to standard filter function
-      return compression.filter(req, res);
-    }
-  }));
+  app.use(
+    compression({
+      threshold: 0, // compress all responses
+      level: 6, // compression level (0-9)
+      filter: (req, res) => {
+        if (req.headers['x-no-compression']) {
+          // don't compress responses with this request header
+          return false;
+        }
+        // fallback to standard filter function
+        return compression.filter(req, res);
+      },
+    }),
+  );
 
-  app.use(helmet(
-    {
-      crossOriginResourcePolicy: { policy: "cross-origin" },
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          "img-src": ["'self'", "data:", "validator.swagger.io"],
-          "script-src": ["'self'", "https: 'unsafe-inline'"],
+          'img-src': ["'self'", 'data:', 'validator.swagger.io'],
+          'script-src': ["'self'", "https: 'unsafe-inline'"],
         },
       },
-    }
-  ));
+    }),
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({
