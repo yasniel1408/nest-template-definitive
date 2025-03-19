@@ -1,9 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 import { CacheService } from './cache.service';
-import { CacheModule as NestCacheModule } from '@nestjs/cache-manager';
+import { CacheInterceptor, CacheModule as NestCacheModule } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
 import Keyv from 'keyv';
 import { CacheableMemory, createKeyv } from 'cacheable';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Global()
 @Module({
@@ -25,7 +26,10 @@ import { CacheableMemory, createKeyv } from 'cacheable';
           inject: [ConfigService]
     })
   ],
-  providers: [CacheService],
+  providers: [CacheService, {
+    provide: APP_INTERCEPTOR,
+    useClass: CacheInterceptor,
+  },],
   exports: [CacheService],
 })
 export class CacheModule {}
