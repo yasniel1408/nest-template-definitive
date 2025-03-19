@@ -62,7 +62,7 @@ describe('AppController', () => {
       expect(cacheService.cacheFirst).toHaveBeenCalledWith(
         'health',
         expect.any(Function),
-        36000
+        36000,
       );
     });
 
