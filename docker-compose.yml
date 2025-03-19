@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: development.Dockerfile
+    ports:
+      - "8080:8080"
+    env_file: dev.env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    volumes:
+      - .:/usr/src
+      - /usr/src/node_modules
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  k6:
+    image: ghcr.io/grafana/xk6-dashboard:0.7.2
+    container_name: k6
+    volumes:
+      - ./tests/performance:/tests/performance
+      - ./k6-results:/home/k6
+    ports:
+      - "5665:5665"
+    environment:
+      BASE_URL: "http://host.docker.internal:3000"
+      K6_WEB_DASHBOARD_EXPORT: "report.html"
+      K6_WEB_DASHBOARD_PERIOD: "1s"
+      K6_WEB_DASHBOARD_OPEN: "true"
+    command: [
+      "run",
+      "--out", "web-dashboard",
+      "/tests/performance/contexts/users/get-users.mjs"
+    ]

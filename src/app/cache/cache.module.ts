@@ -5,30 +5,37 @@ import {
   CacheModule as NestCacheModule,
 } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
-// import Keyv from 'keyv';
-// import { CacheableMemory, createKeyv } from 'cacheable';
+import { Logger } from '@nestjs/common';
+import { redisStore } from 'cache-manager-redis-store';
+import { CacheableMemory } from 'cacheable';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Global()
 @Module({
   imports: [
     NestCacheModule.registerAsync({
-      useFactory: (configService: ConfigService) => {
-        return {
-          stores: [
-            // new Keyv({
-            //   store: new CacheableMemory({ ttl: 60000, lruSize: 5000 }),
-            // }),
-            // createKeyv('redis://localhost:6379'),
-          ],
-          ttl: parseInt(configService.getOrThrow<string>('CACHE_TTL', '60')),
-          max: parseInt(
-            configService.getOrThrow<string>('CACHE_MAX_ITEMS', '9999999999'),
-          ),
-        };
+      useFactory: async (configService: ConfigService, logger: Logger) => {
+        const ttl = parseInt(configService.getOrThrow<string>('CACHE_TTL', '60'));
+        const max = parseInt(configService.getOrThrow<string>('CACHE_MAX_ITEMS', '9999999999'));
+        
+        try {
+          const store = await redisStore({
+            url: `redis://${configService.getOrThrow<string>('REDIS_HOST')}:${configService.getOrThrow<string>('REDIS_PORT')}`,
+            ttl: ttl * 1000
+          });
+          logger.log('Successfully connected to Redis cache');
+          return { store, ttl, max };
+        } catch (error) {
+          logger.warn('Failed to connect to Redis, falling back to memory cache: ' + error.message);
+          return {
+            store: new CacheableMemory({ ttl: ttl * 1000, lruSize: max }),
+            ttl,
+            max
+          };
+        }
       },
       isGlobal: true,
-      inject: [ConfigService],
+      inject: [ConfigService, Logger],
     }),
   ],
   providers: [

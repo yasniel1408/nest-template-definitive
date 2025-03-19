@@ -1,4 +1,4 @@
-FROM node:21-alpine3.18
+FROM node:22-alpine3.18
 
 COPY ["./package.json", "./package-lock.json", "/usr/src/"]
 
@@ -8,6 +8,6 @@ COPY ["./", "/usr/src/"]
 
 RUN npm install
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["npm", "run", "start:dev"]

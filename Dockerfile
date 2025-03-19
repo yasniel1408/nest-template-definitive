@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Fase 2: Imagen final de producción
-FROM node:21-alpine3.18
+FROM node:22-alpine3.18
 
 WORKDIR /usr/src
 
