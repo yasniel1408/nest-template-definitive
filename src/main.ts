@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app/app.module';
 import { setupApp } from './setup-app';
+import { Logger } from '@nestjs/common';
+
 
 async function bootstrap() {
   // Config App
@@ -16,8 +18,10 @@ async function bootstrap() {
   // Run Microservices and Apps
   await app.listen(configService.getOrThrow<number>('PORT'));
   await app.startAllMicroservices();
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  return app;
 }
-bootstrap().then((r) => {
-  console.log(`Application is running, check routes at: /api/health`);
+bootstrap().then(async (app) => {
+  const logger = app.get(Logger);
+  logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`Check health route at: ${await app.getUrl()}/api/health`);
 });
