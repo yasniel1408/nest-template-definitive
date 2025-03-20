@@ -5,9 +5,10 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { CircuitBreakerService } from './circuit-breaker.service';
 import { Reflector } from '@nestjs/core';
-import { CIRCUIT_BREAKER_OPTIONS } from './circuit-breaker.decorator';
+import { CIRCUIT_BREAKER_OPTIONS } from '../decorators/circuit-breaker.decorator';
+import { CircuitBreakerService } from '../services/circuit-breaker.service';
+import { CircuitBreakerOpenError } from '../errors/CircuitBreakerOpenError';
 
 @Injectable()
 export class CircuitBreakerInterceptor implements NestInterceptor {
@@ -34,7 +35,21 @@ export class CircuitBreakerInterceptor implements NestInterceptor {
           subscriber.next(value);
           subscriber.complete();
         })
-        .catch(err => subscriber.error(err));
+        .catch(err => {
+          if (err instanceof CircuitBreakerOpenError) {
+            const error = {
+              message: err.message,
+              statusCode: err.statusCode,
+              errorType: err.errorType,
+            }
+            subscriber.error(error);
+            throw new CircuitBreakerOpenError(err.message)
+          } else if (err.response) {
+            subscriber.error(err.response);
+          } else {
+            subscriber.error(err);
+          }
+        });
     });
   }
 }

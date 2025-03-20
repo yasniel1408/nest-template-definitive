@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { HealthCheckResponseDto } from './health-check.response.dto';
 
 @Injectable()
-export class AppService {
+export class HealthService {
   constructor(private readonly config: ConfigService) {}
 
   public getAPIData(): HealthCheckResponseDto {

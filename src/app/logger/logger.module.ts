@@ -1,6 +1,8 @@
 import { Global, Logger, Module, Provider } from '@nestjs/common';
 import { LogLevel } from '@nestjs/common/services/logger.service';
 import { ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RequestLoggerInterceptor } from './interceptors/request-logger.interceptor';
 
 const loggerProvider: Provider = {
   provide: Logger,
@@ -15,7 +17,13 @@ const loggerProvider: Provider = {
 
 @Global()
 @Module({
-  providers: [loggerProvider],
+  providers: [
+    loggerProvider,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RequestLoggerInterceptor,
+    },
+  ],
   exports: [loggerProvider],
 })
 export class LoggerModule {}

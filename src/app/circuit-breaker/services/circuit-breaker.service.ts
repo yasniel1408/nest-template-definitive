@@ -1,23 +1,8 @@
 import { Injectable } from '@nestjs/common';
-
-enum CircuitState {
-  CLOSED = 'CLOSED',
-  OPEN = 'OPEN',
-  HALF_OPEN = 'HALF_OPEN',
-}
-
-interface CircuitBreakerOptions {
-  failureThreshold: number;
-  resetTimeout: number;
-  halfOpenTimeout: number;
-}
-
-interface CircuitBreakerState {
-  state: CircuitState;
-  failureCount: number;
-  lastFailureTime: number;
-  nextAttempt: number;
-}
+import { CircuitState } from '../types/CircuitState';
+import { CircuitBreakerOptions } from '../types/CircuitBreakerOptions';
+import { CircuitBreakerOpenError } from '../errors/CircuitBreakerOpenError';
+import { CircuitBreakerState } from '../types/CircuitBreakerState';
 
 @Injectable()
 export class CircuitBreakerService {
@@ -40,7 +25,7 @@ export class CircuitBreakerService {
       if (this.shouldAttemptReset(circuit)) {
         this.transitionToHalfOpen(circuit);
       } else {
-        throw new Error('Circuit breaker is OPEN');
+        throw new CircuitBreakerOpenError('Circuit breaker is OPEN');
       }
     }
 

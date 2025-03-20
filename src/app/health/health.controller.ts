@@ -1,19 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AppService } from './app.service';
+import { HealthService } from './health.service';
 import { HealthCheckResponseDto } from './health-check.response.dto';
 import { CacheService } from '../cache/cache.service';
-import { UseCircuitBreaker } from '../circuit-breaker/circuit-breaker.decorator';
 
 @ApiTags('Health Check')
 @Controller('/health')
-export class AppController {
+export class HealthController {
   constructor(
-    private readonly appService: AppService,
+    private readonly healthService: HealthService,
     private readonly cacheService: CacheService,
   ) {}
 
-  @UseCircuitBreaker()
   @Get()
   @ApiOperation({ summary: 'Get service health status' })
   @ApiResponse({
@@ -31,7 +29,7 @@ export class AppController {
           console.log('Delayed for 1 second.');
         });
 
-        return this.appService.getAPIData();
+        return this.healthService.getAPIData();
       },
       36000,
     ); // 10 hours

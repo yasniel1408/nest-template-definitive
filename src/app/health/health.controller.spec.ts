@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CacheService } from '../cache/cache.service';
 import { HealthCheckResponseDto } from './health-check.response.dto';
+import { HealthController } from './health.controller';
+import { HealthService } from './health.service';
 
 describe('AppController', () => {
-  let controller: AppController;
-  let appService: AppService;
+  let controller: HealthController;
+  let service: HealthService;
   let cacheService: CacheService;
 
   // Mock response data
@@ -20,20 +20,32 @@ describe('AppController', () => {
   // Create mock services
   const mockAppService = {
     getAPIData: jest.fn().mockResolvedValue(mockHealthResponse),
+    testCircuitBreaker: jest.fn() // Añadir mock para el nuevo método
   };
+
+  // Añadir objeto de caché simulado
+  const mockCache = {};
 
   const mockCacheService = {
     cacheFirst: jest.fn().mockImplementation(async (key, fn) => {
-      return await fn();
-    }),
+      if (!mockCache[key]) {
+        try {
+          mockCache[key] = await fn();
+        } catch (error) {
+          mockCache[key] = error;
+          throw error;
+        }
+      }
+      return mockCache[key];
+    })
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
+      controllers: [HealthController],
       providers: [
         {
-          provide: AppService,
+          provide: HealthService,
           useValue: mockAppService,
         },
         {
@@ -43,8 +55,8 @@ describe('AppController', () => {
       ],
     }).compile();
 
-    controller = module.get<AppController>(AppController);
-    appService = module.get<AppService>(AppService);
+    controller = module.get<HealthController>(HealthController);
+    service = module.get<HealthService>(HealthService);
     cacheService = module.get<CacheService>(CacheService);
   });
 
@@ -71,7 +83,7 @@ describe('AppController', () => {
       await controller.healthCheck();
 
       // Assert
-      expect(appService.getAPIData).toHaveBeenCalled();
+      expect(service.getAPIData).toHaveBeenCalled();
     });
 
     it('should handle errors properly', async () => {

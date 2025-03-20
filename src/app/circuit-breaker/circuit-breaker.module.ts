@@ -1,5 +1,6 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
-import { CircuitBreakerService } from './circuit-breaker.service';
+import { CircuitBreakerService } from './services/circuit-breaker.service';
+import { CircuitBreakerController } from './controllers/circuit-breaker.controller';
 
 export interface CircuitBreakerModuleOptions {
   failureThreshold: number;
@@ -8,7 +9,10 @@ export interface CircuitBreakerModuleOptions {
 }
 
 @Global()
-@Module({})
+@Module({
+  controllers: [CircuitBreakerController],
+  providers: [CircuitBreakerService],
+})
 export class CircuitBreakerModule {
   static register(options: CircuitBreakerModuleOptions): DynamicModule {
     return {
