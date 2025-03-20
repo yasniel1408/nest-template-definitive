@@ -3,10 +3,13 @@ import { ErrorManagerFilter } from './filters/error-manager.filter';
 
 @Global()
 @Module({
-  providers: [ErrorManagerFilter, {
-    provide: 'APP_FILTER',
-    useClass: ErrorManagerFilter,
-  }],
+  providers: [
+    ErrorManagerFilter,
+    {
+      provide: 'APP_FILTER',
+      useClass: ErrorManagerFilter,
+    },
+  ],
   exports: [ErrorManagerFilter],
 })
 export class ErrorManagerModule {}

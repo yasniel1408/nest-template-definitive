@@ -1,4 +1,9 @@
-import { Catch, ExceptionFilter, ArgumentsHost, HttpStatus } from '@nestjs/common';
+import {
+  Catch,
+  ExceptionFilter,
+  ArgumentsHost,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Logger } from '@nestjs/common';
 import { ErrorResponse } from '../types/ErrorResponse';
@@ -12,8 +17,7 @@ export class ErrorManagerFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
-      exception.status || HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = exception.status || HttpStatus.INTERNAL_SERVER_ERROR;
     const message = exception.message || 'Internal server error';
     const errorType = exception.errorType || 'UnhandledError';
 
