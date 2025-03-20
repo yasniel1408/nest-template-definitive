@@ -43,7 +43,6 @@ export class CircuitBreakerInterceptor implements NestInterceptor {
               errorType: err.errorType,
             }
             subscriber.error(error);
-            throw new CircuitBreakerOpenError(err.message)
           } else if (err.response) {
             subscriber.error(err.response);
           } else {

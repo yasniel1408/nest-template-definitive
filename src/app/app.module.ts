@@ -6,6 +6,7 @@ import { CacheModule } from './cache/cache.module';
 import { HttpModule } from './http/http.module';
 import { CircuitBreakerModule } from './circuit-breaker/circuit-breaker.module';
 import { HealthModule } from './health/health.module';
+import { ErrorManagerModule } from './error-manager/error-manager.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { HealthModule } from './health/health.module';
     HttpModule,
     CircuitBreakerModule,
     HealthModule,
+    ErrorManagerModule,
   ],
   controllers: [],
   providers: [],
