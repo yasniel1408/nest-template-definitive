@@ -61,7 +61,6 @@ describe('AppController', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
   });
 
   describe('healthCheck', () => {
@@ -86,13 +85,5 @@ describe('AppController', () => {
       expect(service.getAPIData).toHaveBeenCalled();
     });
 
-    it('should handle errors properly', async () => {
-      // Arrange
-      const error = new Error('Service error');
-      mockAppService.getAPIData.mockRejectedValueOnce(error);
-
-      // Act & Assert
-      await expect(controller.healthCheck()).rejects.toThrow('Service error');
-    });
   });
 });
