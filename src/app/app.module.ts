@@ -7,6 +7,7 @@ import { HttpModule } from './http/http.module';
 import { CircuitBreakerModule } from './circuit-breaker/circuit-breaker.module';
 import { HealthModule } from './health/health.module';
 import { ErrorManagerModule } from './error-manager/error-manager.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ErrorManagerModule } from './error-manager/error-manager.module';
     CircuitBreakerModule,
     HealthModule,
     ErrorManagerModule,
+    EventsModule,
   ],
   controllers: [],
   providers: [],

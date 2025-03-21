@@ -2,6 +2,7 @@ import { setupApp } from './setup-app';
 import { Logger } from '@nestjs/common';
 import { App } from './app';
 import { swaggerConfig } from './app/swagger/swagger.config';
+import { getRabbitMQConfig } from './app/events/rabbitmq/rabbitmq.config';
 
 async function bootstrap() {
   // Config App
@@ -9,9 +10,9 @@ async function bootstrap() {
   setupApp(app);
 
   // Config Microservices
-  // const rmqService = app.get<RmqService>(RmqService);
-  // app.connectMicroservice(rmqService.getOptions('RMQ_SERVICE'));
+  getRabbitMQConfig(configService);
 
+  // Config Swagger
   swaggerConfig(app);
 
   // Run Microservices and Apps
